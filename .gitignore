@@ -1,0 +1,21 @@
+# The rulebooks themselves. They are commercial products and are not mine to
+# redistribute -- you bring your own copies. books.toml records the sha256 of each
+# one so the pipeline can tell you whether your PDF is the edition it was built for.
+*.pdf
+
+# Everything derived from those PDFs. build/*.chunks.jsonl in particular holds the
+# VERBATIM extracted text of the books, so this directory must never be published
+# even though the index built from it can be. It is also where the paid LLM cache
+# lives (build/entries, build/ships) -- keep it, back it up, do not commit it.
+build/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+
+# Local Claude Code permissions -- machine-specific, not project config
+.claude/settings.local.json
+
+# macOS
+.DS_Store

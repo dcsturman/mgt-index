@@ -1,0 +1,92 @@
+# Book registry — single source of truth for the index pipeline.
+# Add a book: append a [[book]] block (or run `index add <pdf>`).
+#
+# genre selects a section of mgtindex/rubric.md -- what a reader HUNTS FOR differs
+# enormously between a rules manual, a catalogue, a construction manual and a
+# bestiary. It is also part of the Stage 2 cache key, so editing one genre's
+# section only invalidates the books in that genre.
+# One of: rules | catalogue | construction | bestiary
+
+[[book]]
+id      = "core-rulebook"
+siglum  = "CRB"
+title   = "Mongoose Traveller 2e Core Rulebook (2022 Update)"
+file    = "MgT2 Core Rulebook Update 2022 11-12-2024.pdf"
+sha256  = "a77c176483038ca9d0534c82acddaf2ecedf2fbcdf9c4720a302a2d64d5ec828"
+pages   = 266
+offset  = 0   # printed_page = pdf_index - offset
+profile = "mongoose-indesign"
+genre   = "rules"
+order   = 1
+
+[[book]]
+id      = "high-guard"
+siglum  = "HG"
+title   = "High Guard (2024)"
+file    = "High Guard Apr 2024.pdf"
+sha256  = "d38a2e4bbb473db3b5adf229b075a42c85953f0904c9cc1257b8cff4ea503156"
+pages   = 290
+offset  = 0   # printed_page = pdf_index - offset
+profile = "mongoose-indesign"
+genre   = "construction"
+order   = 2
+
+[[book]]
+id      = "central-supply-catalogue"
+siglum  = "CSC"
+title   = "Central Supply Catalogue (2023 Update)"
+file    = "CSC Update 2023 23-04-24.pdf"
+sha256  = "e2bf6394fe5fb1337994e61b44d86e5f5ac85a02e218fcb44966d278ce2c0052"
+pages   = 186
+offset  = 0   # printed_page = pdf_index - offset
+profile = "mongoose-indesign"
+genre   = "catalogue"
+order   = 3
+
+[[book]]
+id      = "traveller-companion"
+siglum  = "TC"
+title   = "Traveller Companion (2024 Update)"
+file    = "MgT2 Companion 2024 Update.pdf"
+sha256  = "876bd182142209acd15e2a78c11c9ca11d2640da0aadb74bc51af9691c8e7c2d"
+pages   = 186
+offset  = 0   # printed_page = pdf_index - offset
+profile = "mongoose-indesign"
+genre   = "rules"
+order   = 4
+
+[[book]]
+id      = "robot-handbook"
+siglum  = "RH"
+title   = "Robot Handbook"
+file    = "Robot Handbook 23-04-24.pdf"
+sha256  = "89a5bb91bdb388de8ff7b93b63da7ee9b506075d26fe9574149a5f627bfd3668"
+pages   = 266
+offset  = 0   # printed_page = pdf_index - offset
+profile = "mongoose-indesign"
+genre   = "construction"
+order   = 5
+
+[[book]]
+id      = "aliens-charted-space-v1"
+siglum  = "AL1"
+title   = "Aliens of Charted Space Volume 1"
+file    = "Aliens of Charted Space Volume 1 25-04-24.pdf"
+sha256  = "92470ff4151a651d2cec372c5db811a9045d6a1a63a34a57aaf49d20dc9e3fc2"
+pages   = 305
+offset  = 0   # printed_page = pdf_index - offset
+profile = "mongoose-tradegothic"
+genre   = "bestiary"
+order   = 6
+
+[[book]]
+id      = "aliens-charted-space-v2"
+siglum  = "AL2"
+title   = "Aliens of Charted Space Volume 2"
+file    = "Aliens of Charted Space Volume 2.pdf"
+sha256  = "6dca711ae2207763e887b099f26dc4669587fdb4077db8bd5d2820e9b3e580f1"
+pages   = 273
+offset  = 0   # printed_page = pdf_index - offset
+profile = "mongoose-tradegothic"
+genre   = "bestiary"
+order   = 7

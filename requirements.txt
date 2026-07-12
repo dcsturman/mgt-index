@@ -1,0 +1,7 @@
+pymupdf>=1.28      # PDF text/font extraction, link annotations, PDF generation
+requests>=2.32     # Vertex AI REST calls
+google-auth>=2.55  # Application Default Credentials for Vertex
+
+# Only needed if you run an Anthropic arm of the bake-off (MGT_ARM=claude-*).
+# The default gemini-3.5 arm does not import it.
+anthropic>=0.116
