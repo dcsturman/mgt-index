@@ -197,12 +197,19 @@ TEMPLATE = r"""<!doctype html>
 <style>
   :root{
     --bg:#faf9f7; --fg:#16151a; --dim:#6b6a72; --line:#e2e0dc;
-    --accent:#8a3324; --card:#fff; --hit:#fdf3d0;
+    --accent:#8a3324; --card:#fff; --hit:#fdf3d0; --flash:#cfe2ff;
   }
   @media (prefers-color-scheme:dark){
     :root{ --bg:#131316; --fg:#e9e8e6; --dim:#95949c; --line:#2c2c31;
-           --accent:#e08a6e; --card:#1a1a1e; --hit:#3a3320; }
+           --accent:#e08a6e; --card:#1a1a1e; --hit:#3a3320; --flash:#1e3a5f; }
   }
+  /* --hit and --flash are deliberately different colours doing different jobs. --hit marks
+     search matches and link hovers -- there can be dozens on screen at once, so it must stay
+     quiet, and a pale wash of the page colour is right. --flash fires ONCE, on the entry you
+     just jumped to, and must be found by an eye that has been dragged across a smooth scroll.
+     Sharing one variable made the flash as quiet as a search mark (1.06:1 against the page --
+     the colour of the paper). Blue because nothing else in this index is blue: the eye locates
+     it without searching. */
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--fg);
        font:15px/1.5 ui-serif,Georgia,"Iowan Old Style",serif;}
@@ -285,7 +292,7 @@ TEMPLATE = r"""<!doctype html>
      journey, or the reader arrives just in time to watch it fade. Hence 4s, held solid for
      the first 2.6 of them. */
   @keyframes flash{
-    0%,65%{background:var(--hit);box-shadow:0 0 0 5px var(--hit)}
+    0%,65%{background:var(--flash);box-shadow:0 0 0 5px var(--flash)}
     100%{background:transparent;box-shadow:0 0 0 5px transparent}
   }
   .e.flash{animation:flash 4s ease-out;border-radius:3px}
