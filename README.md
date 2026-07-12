@@ -48,8 +48,9 @@ redistribute; bring your own PDFs.
 
 ## Get it
 
-**[⬇ Download the index](https://github.com/dcsturman/mgt-index/raw/main/MGT2%20Master%20Index.html)**
+**[⬇ Download the index](https://github.com/dcsturman/mgt-index/releases/latest/download/MGT2-Master-Index.html)**
 — one self-contained HTML file, no install, no build, nothing to run.
+(Or take it from the [releases page](https://github.com/dcsturman/mgt-index/releases/latest).)
 
 Save it **into the folder where you keep your Traveller PDFs**, then open it in a browser.
 If your files still have the names Mongoose shipped them under, that is the whole setup —
@@ -62,12 +63,14 @@ its *path*, and these filenames are long and dated — `MgT2 Core Rulebook Updat
 picker spell them. It matches renamed files by title words too. Settings live in
 `localStorage`, so you do this once per browser.
 
-> Clicking the file on GitHub shows you its source, because GitHub serves HTML as text
-> rather than rendering it. Use the download link above, or `curl`:
+> Take it from the release, not from the file in the repo. GitHub serves everything it has
+> under version control as plain text, so clicking `MGT2 Master Index.html` in the file list
+> shows you a wall of source rather than downloading it — no query string or raw link changes
+> that. Release assets are the only thing GitHub sends as an actual download. Or use `curl`:
 >
 > ```sh
 > curl -L -o "MGT2 Master Index.html" \
->   "https://github.com/dcsturman/mgt-index/raw/main/MGT2%20Master%20Index.html"
+>   "https://github.com/dcsturman/mgt-index/releases/latest/download/MGT2-Master-Index.html"
 > ```
 
 It has to run from your own disk rather than from a web page, and that is not laziness:
