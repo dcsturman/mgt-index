@@ -17,16 +17,43 @@ The books themselves are **not** in this repo — they are commercial products a
 to redistribute. Bring your own PDFs; `books.toml` records the sha256 of each edition the
 index was built against.
 
-## Using the index
+## Get it
 
-Open `MGT2 Master Index.html` in a browser. Every page reference is a link into your local
-copy of the book. Because browsers cannot guess where your PDFs live, the first thing to do
-is open **Settings** and point it at the directory holding them — that is stored in
-`localStorage`, so you do it once.
+**[⬇ Download the index](https://github.com/dcsturman/mgt-index/raw/main/MGT2%20Master%20Index.html)**
+— one self-contained HTML file, no install, no build, nothing to run.
+
+Save it **into the folder where you keep your Traveller PDFs**, then open it in a browser.
+If your files still have the names Mongoose shipped them under, that is the whole setup —
+the links are relative, so they find the books sitting beside them.
+
+Otherwise open **Settings** (⚙): type the folder the books live in, and hit **Choose…** to
+pick them. The picker exists because a browser will tell a page a file's *name* but never
+its *path*, and these filenames are long and dated — `MgT2 Core Rulebook Update 2022
+11-12-2024.pdf` — so one wrong character silently kills every link into that book. Let the
+picker spell them. It matches renamed files by title words too. Settings live in
+`localStorage`, so you do this once per browser.
+
+> Clicking the file on GitHub shows you its source, because GitHub serves HTML as text
+> rather than rendering it. Use the download link above, or `curl`:
+>
+> ```sh
+> curl -L -o "MGT2 Master Index.html" \
+>   "https://github.com/dcsturman/mgt-index/raw/main/MGT2%20Master%20Index.html"
+> ```
+
+It has to run from your own disk rather than from a web page, and that is not laziness:
+browsers refuse to let an `https://` page open a `file:///` link — sensibly, or any site
+could rummage through your filesystem. So a hosted copy would render perfectly and every
+one of its ~9,800 page links would be dead. Local it is.
+
+## Using it
+
+Every page reference is a link that opens the right book at the right page, scrolled to the
+right paragraph. Search matches terms and aliases as you type.
 
 The **Ships** tab lists every vessel with a full specification in any of the seven books,
-sortable by tonnage, name, or book. Looking up a ship is a common enough activity to
-deserve its own view, and it beats hunting for a name you half-remember.
+sortable by tonnage, name, or book. Looking up a ship is a common enough activity to deserve
+its own view, and it beats hunting for a name you half-remember.
 
 ## How it works
 
