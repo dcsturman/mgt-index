@@ -10,12 +10,41 @@ rule, it lives in an unheaded paragraph, and today it is unfindable. This index 
 find it.
 
 **Output:** `MGT2 Master Index.html` — 3,190 headwords, 4,855 records, ~9,800 deep links
-that open the right PDF at the right page. Plus a printable PDF, and a sortable catalogue
-of all 108 ship designs across the seven books.
+that open the right PDF at the right page. Plus a printable PDF, and a sortable catalogue of
+every ship in the seven books that has a full specification.
 
-The books themselves are **not** in this repo — they are commercial products and not mine
-to redistribute. Bring your own PDFs; `books.toml` records the sha256 of each edition the
-index was built against.
+## The books it covers
+
+Seven books, 1,772 printed pages, indexed into one alphabet.
+
+Look up `armour` and you get it under four separate meanings — *personal* armour (Core
+Rulebook, Central Supply Catalogue, Companion, Robot Handbook, Aliens Vol. 2), *spacecraft*
+armour (High Guard), *robot* armour (Robot Handbook), and armour as a *combat mechanic*
+(Core Rulebook) — with 42 subentries filed under whichever one they belong to. That is the
+point of the exercise: one lookup, every book, and the senses kept apart.
+
+| | Book | Edition indexed | Pages | Index refs | Ships |
+|---|---|---|---:|---:|---:|
+| **CRB** | Core Rulebook | 2022 Update (Dec 2024 printing) | 266 | 1,829 | 24 |
+| **HG** | High Guard | Apr 2024 | 290 | 1,446 | 31 |
+| **CSC** | Central Supply Catalogue | 2023 Update (Apr 2024 printing) | 186 | 1,394 | — |
+| **TC** | Traveller Companion | 2024 Update | 186 | 938 | — |
+| **RH** | Robot Handbook | Apr 2024 | 266 | 1,504 | — |
+| **AL1** | Aliens of Charted Space, Vol. 1 | Apr 2024 | 305 | 1,345 | 30 |
+| **AL2** | Aliens of Charted Space, Vol. 2 | undated printing | 273 | 1,364 | 9 |
+| | | | **1,772** | **9,820** | **94** |
+
+*Index refs* is how many page links point into that book; *Ships* is how many vessels in it
+carry a full stat block and so appear in the Ships tab.
+
+**Editions matter.** Mongoose reprints these books and the pages move, so an index built
+against one printing is wrong for another. Every page link here is generated against the
+exact file listed above, and `books.toml` records each one's SHA-256 — the index's **About**
+panel shows them, so you can check whether your copy is the same printing before you trust a
+page number.
+
+The books themselves are **not** in this repo. They are commercial products and not mine to
+redistribute; bring your own PDFs.
 
 ## Get it
 
