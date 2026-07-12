@@ -279,12 +279,16 @@ TEMPLATE = r"""<!doctype html>
   mark{background:var(--hit);color:inherit;border-radius:2px}
   a.xref{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
   a.xref:hover{background:var(--hit)}
-  /* a cross-reference lands you somewhere new -- show where, or the jump is disorienting */
+  /* a cross-reference lands you somewhere new -- show where, or the jump is disorienting.
+     The flash starts when the jump starts, but the smooth scroll to the target can run the
+     best part of a second on a page this long -- so the highlight has to outlast the
+     journey, or the reader arrives just in time to watch it fade. Hence 4s, held solid for
+     the first 2.6 of them. */
   @keyframes flash{
-    0%,55%{background:var(--hit);box-shadow:0 0 0 5px var(--hit)}
+    0%,65%{background:var(--hit);box-shadow:0 0 0 5px var(--hit)}
     100%{background:transparent;box-shadow:0 0 0 5px transparent}
   }
-  .e.flash{animation:flash 1.8s ease-out;border-radius:3px}
+  .e.flash{animation:flash 4s ease-out;border-radius:3px}
   html{scroll-behavior:smooth}
 
   #settings,#about{display:none;background:var(--card);border:1px solid var(--line);
