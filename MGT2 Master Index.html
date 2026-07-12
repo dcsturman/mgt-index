@@ -67,7 +67,11 @@
        padding:5px 12px 6px;color:var(--dim);font:600 12.5px/1 ui-sans-serif,system-ui;
        letter-spacing:.03em;border-radius:4px 4px 0 0}
   .tab:hover{color:var(--fg)}
-  .tab.on{color:var(--accent);border-bottom-color:var(--accent)}
+  /* A tab IS a <button>, so `button.on` above lands on it and fills it with --accent --
+     while `.tab.on` (two classes, higher specificity) wins the colour and paints the label
+     --accent too. Accent on accent: the selected tab reads as a blank block. These are
+     underline tabs, not pills, so put the fill back to none explicitly. */
+  .tab.on{background:none;color:var(--accent);border-bottom-color:var(--accent)}
   #fleet{display:none;padding:14px 20px 60px}
   #fleet.on{display:block}
   #fleet table{border-collapse:collapse;width:100%;max-width:900px;
