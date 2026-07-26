@@ -24,6 +24,7 @@ whole document churns. New books propose new terms; settled terms are frozen.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import time
@@ -36,6 +37,12 @@ from mgtindex.backends import Vertex
 
 ROOT = Path(__file__).resolve().parent.parent
 VOCAB = ROOT / "build" / "vocab.json"
+# One adjudicated cluster per file, keyed by its content (see _cache_key). Adjudication is
+# the whole cost of this stage, it re-runs over the ENTIRE corpus every time, and it has no
+# per-book scope -- so without this cache, adding one small book re-bills all ~800 clusters
+# (~$10). With it, only the clusters that actually changed are re-billed; the rest load free.
+CLUSTER_CACHE = ROOT / "build" / "clusters"
+MODEL = "gemini-3.5-flash"
 _REG = tomllib.loads((ROOT / "books.toml").read_text())["book"]
 SIGLA = {b["id"]: b["siglum"] for b in _REG}
 ORDER = {b["id"]: b["order"] for b in _REG}
@@ -181,6 +188,28 @@ def snippet(text: str, term: str) -> str:
     return ("... " if lo else "") + text[lo:hi] + (" ..." if hi < len(text) else "")
 
 
+_CACHE_V = "1"  # bump to invalidate every cluster (prompt/format/resolution change)
+
+
+def _cache_key(key: str, occs: list[dict]) -> str:
+    """Content hash over everything that determines a cluster's adjudicated result.
+
+    Includes each occurrence's book, page, role, term, heading path and snippet -- the exact
+    inputs adjudicate() turns into a prompt and then resolves ids against -- plus the model,
+    the system prompt and a format version. So a cluster is re-billed only when something that
+    would actually change its output changes; add a book and only its handful of genuinely new
+    or newly-collided clusters re-run, not all ~800.
+    """
+    ordered = sorted(occs, key=lambda o: o["page"])
+    sig = "\n".join(
+        f"{o['book_id']}|{o['page']}|{o['role']}|{o['term']}|"
+        f"{'>'.join(o.get('path') or [])}|{snippet(o.get('text', ''), o['term'])}"
+        for o in ordered
+    )
+    raw = f"{_CACHE_V}\n{MODEL}\n{key}\n{sig}\n{SYSTEM}"
+    return hashlib.sha256(raw.encode()).hexdigest()[:16]
+
+
 def adjudicate(backend, key: str, occs: list[dict]) -> dict:
     occs = sorted(occs, key=lambda o: o["page"])
     lines = [
@@ -293,17 +322,28 @@ def run(entries: list[dict], workers: int = 8):
     simple = {k: v for k, v in groups.items() if not needs_review(v)}
     print(f"{len(groups)} clusters: {len(simple)} pass through, {len(review)} need adjudication")
 
-    backend = Vertex("gemini-3.5-flash", 1.5, 9.0)
+    backend = Vertex(MODEL, 1.5, 9.0)
     spend = 0.0
+    hits = 0
 
     def one(item):
         # A cluster that falls back to passthrough is NOT merely slower -- it is unmerged
         # and unsplit, which is the exact defect this stage exists to remove. Retry before
         # giving up on one.
+        nonlocal hits
         k, occs = item
+        cached = CLUSTER_CACHE / f"{_cache_key(k, occs)}.json"
+        if cached.exists():
+            hits += 1
+            return k, json.loads(cached.read_text())  # no _usage -> contributes $0
         for attempt in range(3):
             try:
-                return k, adjudicate(backend, k, occs)
+                out = adjudicate(backend, k, occs)
+                # Cache the resolved result WITHOUT _usage, so a later hit is free and cost is
+                # never double-counted. _usage stays on the in-memory copy for this run's total.
+                CLUSTER_CACHE.mkdir(parents=True, exist_ok=True)
+                cached.write_text(json.dumps({x: v for x, v in out.items() if x != "_usage"}))
+                return k, out
             except Exception as exc:
                 last = exc
                 time.sleep(2 * 2**attempt)
@@ -317,6 +357,8 @@ def run(entries: list[dict], workers: int = 8):
         u = r.pop("_usage", None)
         if u:
             spend += backend.cost(u)
+    print(f"  {hits}/{len(review)} clusters from cache (free); "
+          f"{len(review) - hits} adjudicated -> ${spend:.3f}")
 
     vocab = {k: passthrough(v) for k, v in simple.items()}
     vocab.update(adjudicated)
