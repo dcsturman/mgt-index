@@ -1,6 +1,6 @@
 # MGT2 Master Index
 
-A single fine-grained index across seven Mongoose Traveller 2nd Edition rulebooks, built
+A single fine-grained index across nine Mongoose Traveller 2nd Edition rulebooks, built
 by running the books through a text-extraction pipeline and an LLM indexer.
 
 Mongoose spreads the rules for one topic across many books, and each book ships an index
@@ -9,33 +9,39 @@ that is really just a dump of its section headings — `Opposed Checks 62`, `Mul
 rule, it lives in an unheaded paragraph, and today it is unfindable. This index tries to
 find it.
 
-**Output:** `MGT2 Master Index.html` — 3,190 headwords, 4,855 records, ~9,800 deep links
+**Output:** `MGT2 Master Index.html` — 3,300+ headwords, 5,043 records, ~10,800 deep links
 that open the right PDF at the right page. Plus a printable PDF, and a sortable catalogue of
-every ship in the seven books that has a full specification.
+all 125 ships across the nine books that carry a full specification.
 
 ## The books it covers
 
-Seven books, 1,772 printed pages, indexed into one alphabet.
+Nine books, ~1,900 printed pages, indexed into one alphabet.
 
-Look up `armour` and you get it under four separate meanings — *personal* armour (Core
-Rulebook, Central Supply Catalogue, Companion, Robot Handbook, Aliens Vol. 2), *spacecraft*
-armour (High Guard), *robot* armour (Robot Handbook), and armour as a *combat mechanic*
-(Core Rulebook) — with 42 subentries filed under whichever one they belong to. That is the
-point of the exercise: one lookup, every book, and the senses kept apart.
+Look up `armour` and you get it under separate meanings — *personal* armour (Core Rulebook,
+Central Supply Catalogue, Companion, Robot Handbook, Aliens Vol. 2), *spacecraft* armour
+(High Guard), *robot* armour (Robot Handbook), and armour as a *combat mechanic* (Core
+Rulebook) — with its subentries filed under whichever one they belong to. That is the point
+of the exercise: one lookup, every book, and the senses kept apart.
 
 | | Book | Edition indexed | Pages | Index refs | Ships |
 |---|---|---|---:|---:|---:|
 | **CRB** | Core Rulebook | 2022 Update (Dec 2024 printing) | 266 | 1,829 | 24 |
-| **HG** | High Guard | Apr 2024 | 290 | 1,446 | 31 |
+| **HG** | High Guard | Apr 2024 | 290 | 1,457 | 31 |
 | **CSC** | Central Supply Catalogue | 2023 Update (Apr 2024 printing) | 186 | 1,394 | — |
 | **TC** | Traveller Companion | 2024 Update | 186 | 938 | — |
 | **RH** | Robot Handbook | Apr 2024 | 266 | 1,504 | — |
-| **AL1** | Aliens of Charted Space, Vol. 1 | Apr 2024 | 305 | 1,345 | 30 |
+| **AL1** | Aliens of Charted Space, Vol. 1 | Apr 2024 | 305 | 1,352 | 30 |
 | **AL2** | Aliens of Charted Space, Vol. 2 | undated printing | 273 | 1,364 | 9 |
-| | | | **1,772** | **9,820** | **94** |
+| **SotR** | Pirates of Drinax: Ships of the Reach | ebook (2024) | 97 | 775 | 24 |
+| **JG** | Jayne's Guide to the Reach | Drinaxian Companion, pp. 187–213 | 27 | 200 | 7 |
+| | | | **1,896** | **10,813** | **125** |
 
 *Index refs* is how many page links point into that book; *Ships* is how many vessels in it
 carry a full stat block and so appear in the Ships tab.
+
+**Jayne's Guide is a single chapter** of the *Drinaxian Companion*, not the whole book. The
+index shows the Companion's own page numbers (187–213) so a reference lines up with the full
+book, but the links open a standalone 27-page PDF of just that chapter.
 
 **Editions matter.** Mongoose reprints these books and the pages move, so an index built
 against one printing is wrong for another. Every page link here is generated against the
@@ -76,14 +82,14 @@ picker spell them. It matches renamed files by title words too. Settings live in
 It has to run from your own disk rather than from a web page, and that is not laziness:
 browsers refuse to let an `https://` page open a `file:///` link — sensibly, or any site
 could rummage through your filesystem. So a hosted copy would render perfectly and every
-one of its ~9,800 page links would be dead. Local it is.
+one of its ~10,800 page links would be dead. Local it is.
 
 ## Using it
 
 Every page reference is a link that opens the right book at the right page, scrolled to the
 right paragraph. Search matches terms and aliases as you type.
 
-The **Ships** tab lists every vessel with a full specification in any of the seven books,
+The **Ships** tab lists every vessel with a full specification in any of the nine books,
 sortable by tonnage, name, or book. Looking up a ship is a common enough activity to deserve
 its own view, and it beats hunting for a name you half-remember.
 

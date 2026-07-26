@@ -90,3 +90,31 @@ offset  = 0   # printed_page = pdf_index - offset
 profile = "mongoose-tradegothic"
 genre   = "bestiary"
 order   = 7
+
+[[book]]
+id      = "ships-of-the-reach"
+siglum  = "SotR"
+title   = "Pirates of Drinax: Ships of the Reach"
+file    = "pirates_of_drinax_3_ebook.pdf"
+sha256  = "fc3f7bf60ae58ad7a6e7e0205d599c9c8834e1c0025bb7062ecfa85e163fa965"
+pages   = 97
+offset  = 0   # printed_page = pdf_index - offset; folios track the pdf pages here
+profile = "mongoose-alegre"
+genre   = "catalogue"
+order   = 8
+
+[[book]]
+# A single chapter extracted from the Drinaxian Companion -- we index only this chapter
+# but display the Companion's own page numbers (187-213), so a reference lines up with the
+# full book. offset -187 makes printed = pdf_index + 187 (pdf p0 carries folio 187), and
+# a link still opens THIS standalone 27-page PDF at the right page.
+id      = "jaynes-guide"
+siglum  = "JG"
+title   = "Jayne's Guide to the Reach (Drinaxian Companion)"
+file    = "Jayne's Guide.pdf"
+sha256  = "2d56e5a9f75bf1e8df0c5baac32e2eb665d5dcd4a11f580161228b9c6660712f"
+pages   = 27
+offset  = -187   # printed_page = pdf_index - offset = pdf_index + 187
+profile = "mongoose-alegre"
+genre   = "catalogue"
+order   = 9

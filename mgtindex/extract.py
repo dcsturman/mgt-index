@@ -44,6 +44,16 @@ PROFILES = {
         "h3": lambda f, s: "TradeGothic" in f and "Bold" in f and 11 <= s < 14,
         "body": lambda f, s: "TradeGothic" in f and s < 11,
     },
+    # The Drinax-era ship books (Jayne's Guide, Pirates of Drinax: Ships of the Reach):
+    # AlegreSans display over TradeGothicLT body. The catch is that stat-block LABELS
+    # (TONS, CREW, JUMP DRIVE, HULL POINTS, TOTAL: MCR...) are set in AlegreSans too, at
+    # 13-20pt -- indistinguishable from a heading by font alone, and if treated as one
+    # they overwrite the ship's name in the breadcrumb. Ship and section names run 24-56pt,
+    # so the size floor is what separates a real heading from a stat label here.
+    "mongoose-alegre": {
+        "h2": lambda f, s: "AlegreSans" in f and s >= 22,
+        "body": lambda f, s: "TradeGothic" in f and s < 13,
+    },
 }
 
 # The text frame, as a fraction of page size. Anything outside it is furniture: the
