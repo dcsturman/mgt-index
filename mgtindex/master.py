@@ -247,7 +247,10 @@ class Layout:
 
 
 def load():
+    from mgtindex import overrides
+
     vocab = json.loads((ROOT / "build" / "vocab.json").read_text())
+    overrides.apply_vocab(vocab)  # manual headword corrections (overrides.toml)
     entries, chunks = [], {}
     for b in _REG:
         ef = ROOT / "build" / f"{b['id']}.entries.jsonl"

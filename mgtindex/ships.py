@@ -258,10 +258,17 @@ def apply(vocab: dict, entries: list[dict]) -> int:
          added, since the stat block proves they exist.
     """
     from mgtindex.canon import blocking_key
+    from mgtindex import overrides
 
     if not OUT.exists():
         return 0
     recs = list(json.loads(OUT.read_text()).values())
+
+    # Manual corrections first, so a fixed name flows through hygiene, deduping and the fold
+    # into the vocabulary exactly as an automatically-identified one would. See overrides.toml.
+    recs, n_ov = overrides.apply_ships(recs, lambda bid: SIGLA.get(bid))
+    if n_ov:
+        print(f"  applied {n_ov} ship override(s)")
 
     # A name that several vessels answer to is not a name -- it is a category. 'small craft',
     # 'scout', 'pinnace'. And an alias that IS another ship's proper name would send the

@@ -1,0 +1,53 @@
+# Manual corrections, applied at build time AFTER every automated stage.
+#
+# Some things the pipeline gets wrong are not worth -- or not possible -- to fix at the root.
+# The usual cause is extraction: a ship's title sits in a font this book's style profile does
+# not recognise as a heading, so it is dropped, and the automated ship identifier then borrows
+# a neighbouring ship's name. Rather than re-run paid stages for one page, record the fix here.
+#
+# Everything is keyed to a stable, human-checkable anchor -- book siglum + printed page for a
+# ship (that is what the index shows), or the exact canonical headword for the A-Z. Overrides
+# are surgical: any field you omit is left exactly as the pipeline produced it.
+
+# ---------------------------------------------------------------------------------------------
+# Ship specification corrections. Keyed by book siglum + the printed stat-block page.
+# Fields: canonical (rename), aliases (replace the list), tons (override the regex), drop=true.
+# ---------------------------------------------------------------------------------------------
+
+[[ship]]
+book = "AL2"
+page = 172
+# The title "MERCANTILE EXPEDITION VESSEL / TENENTSYO-TYPE" is set in AlegreSans, which AL2's
+# tradegothic profile does not treat as a heading, so it was dropped and the identifier reused
+# the previous ship's name (Siyoparttwi). "Auspicious of Communicating" is a hull type, not a
+# vessel name, so it is not an alias.
+canonical = "Tenentsyo-type Mercantile Expedition Vessel"
+aliases = []
+
+# HG shows a ship's class in a detached "CLASS: X" callout box, top-right of the stat block.
+# The two-column reading order separates it from the title, so the identifier took only the
+# generic type name and left the class behind. These are the ones where that happened.
+# (p204 "CLASS: XT" left alone -- XT reads as a hull code, not a class name.)
+[[ship]]
+book = "HG"
+page = 193
+canonical = "Dragon-class System Defence Boat"
+
+[[ship]]
+book = "HG"
+page = 215
+canonical = "Kinunir-class Colonial Cruiser"
+
+[[ship]]
+book = "HG"
+page = 228
+canonical = "Midu Agasham-class Destroyer"
+
+# ---------------------------------------------------------------------------------------------
+# Index headword corrections. Keyed by exact canonical (case-insensitive).
+# Fields: rename, drop=true, aliases_add=[...], aliases_drop=[...]. (None needed yet.)
+# ---------------------------------------------------------------------------------------------
+
+# [[headword]]
+# match = "Wrong Headword"
+# rename = "Correct Headword"
