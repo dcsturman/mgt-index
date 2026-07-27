@@ -45,8 +45,20 @@ canonical = "Midu Agasham-class Destroyer"
 
 # ---------------------------------------------------------------------------------------------
 # Index headword corrections. Keyed by exact canonical (case-insensitive).
-# Fields: rename, drop=true, aliases_add=[...], aliases_drop=[...]. (None needed yet.)
+# Fields: rename, drop=true, aliases_add=[...], aliases_drop=[...].
 # ---------------------------------------------------------------------------------------------
+
+# "Aslan clans" was coined by Stage 2 from a ship's flavour text ("popular inside the
+# Hierate") on AL1 p102 -- the Aoa'iw trader's stat page -- and being its only occurrence,
+# that page became its primary. Drop that noise and point the term at the real clan material:
+# the Clan table on AL1 p15, as a cross-reference.
+[[headword]]
+match = "Aslan clans"
+drop = true
+
+[[headword]]
+match = "Clan table"
+aliases_add = ["Aslan clans"]
 
 # [[headword]]
 # match = "Wrong Headword"
