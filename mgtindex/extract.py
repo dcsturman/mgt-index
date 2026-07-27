@@ -40,7 +40,13 @@ PROFILES = {
     # Aliens of Charted Space -- a different layout house entirely: TradeGothic body,
     # WalkwayExpandBlack / TradeGothic-Bold display faces.
     "mongoose-tradegothic": {
-        "h2": lambda f, s: "Walkway" in f or ("TradeGothic" in f and s >= 14),
+        # The alien books also set ship/section titles in AlegreSans, which a TradeGothic-only
+        # profile dropped -- costing AL2's Tenentsyo its name and mislabelling most of both
+        # fleets. Capture AlegreSans >=20: that reaches the 20pt "-TYPE" tag the Droyne ships
+        # carry (MERCANTILE EXPEDITION VESSEL / TENENTSYO-TYPE) while staying above the 14-18pt
+        # stat-block labels. ("TOTAL:" is also 20pt and comes along as harmless heading noise.)
+        "h2": lambda f, s: "Walkway" in f or ("TradeGothic" in f and s >= 14)
+                           or ("AlegreSans" in f and s >= 20),
         "h3": lambda f, s: "TradeGothic" in f and "Bold" in f and 11 <= s < 14,
         "body": lambda f, s: "TradeGothic" in f and s < 11,
     },

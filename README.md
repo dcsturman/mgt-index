@@ -9,9 +9,9 @@ that is really just a dump of its section headings — `Opposed Checks 62`, `Mul
 rule, it lives in an unheaded paragraph, and today it is unfindable. This index tries to
 find it.
 
-**Output:** `index.html` — 3,300+ headwords, 5,043 records, ~10,800 deep links
+**Output:** `index.html` — 3,700+ headwords, 5,453 records, ~14,500 deep links
 that open the right PDF at the right page. Plus a printable PDF, and a sortable catalogue of
-all 125 ships across the nine books that carry a full specification.
+all 122 ships across the nine books that carry a full specification.
 
 ## The books it covers
 
@@ -25,16 +25,16 @@ of the exercise: one lookup, every book, and the senses kept apart.
 
 | | Book | Edition indexed | Pages | Index refs | Ships |
 |---|---|---|---:|---:|---:|
-| **CRB** | Core Rulebook | 2022 Update (Dec 2024 printing) | 266 | 1,829 | 24 |
-| **HG** | High Guard | Apr 2024 | 290 | 1,457 | 31 |
+| **CRB** | Core Rulebook | 2022 Update (Dec 2024 printing) | 266 | 1,828 | 24 |
+| **HG** | High Guard | Apr 2024 | 290 | 1,461 | 31 |
 | **CSC** | Central Supply Catalogue | 2023 Update (Apr 2024 printing) | 186 | 1,394 | — |
 | **TC** | Traveller Companion | 2024 Update | 186 | 938 | — |
 | **RH** | Robot Handbook | Apr 2024 | 266 | 1,504 | — |
-| **AL1** | Aliens of Charted Space, Vol. 1 | Apr 2024 | 305 | 1,352 | 30 |
-| **AL2** | Aliens of Charted Space, Vol. 2 | undated printing | 273 | 1,364 | 9 |
-| **SotR** | Pirates of Drinax: Ships of the Reach | ebook (2024) | 97 | 775 | 24 |
+| **AL1** | Aliens of Charted Space, Vol. 1 | Apr 2024 | 305 | 3,260 | 30 |
+| **AL2** | Aliens of Charted Space, Vol. 2 | undated printing | 273 | 3,097 | 9 |
+| **SotR** | Pirates of Drinax: Ships of the Reach | ebook (2024) | 97 | 771 | 21 |
 | **JG** | Jayne's Guide to the Reach | Drinaxian Companion, pp. 187–213 | 27 | 200 | 7 |
-| | | | **1,896** | **10,813** | **125** |
+| | | | **1,896** | **14,453** | **122** |
 
 *Index refs* is how many page links point into that book; *Ships* is how many vessels in it
 carry a full stat block and so appear in the Ships tab.
