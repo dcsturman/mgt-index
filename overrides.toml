@@ -60,6 +60,18 @@ drop = true
 match = "Clan table"
 aliases_add = ["Aslan clans"]
 
+# "ECITS" (the modular Interstellar Transport System, JG's one section-of-ships) was elected
+# to a passing mention on JG 213. The section overview already has its own headword,
+# "Interstellar Transport System" (JG 202), so just drop the stray ECITS and alias the term
+# onto it -- "ECITS, see Interstellar Transport System" -> JG 202.
+[[headword]]
+match = "ECITS"
+drop = true
+
+[[headword]]
+match = "Interstellar Transport System"
+aliases_add = ["ECITS"]
+
 # [[headword]]
 # match = "Wrong Headword"
 # rename = "Correct Headword"

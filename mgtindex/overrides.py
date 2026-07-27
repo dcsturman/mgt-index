@@ -14,6 +14,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 _PATH = ROOT / "overrides.toml"
+_SIG2ID = {b["siglum"]: b["id"]
+           for b in tomllib.loads((ROOT / "books.toml").read_text()).get("book", [])}
 
 
 def _load() -> dict:
@@ -62,6 +64,16 @@ def apply_vocab(vocab: dict) -> int:
             else:
                 if "rename" in o:
                     v["canonical"] = o["rename"]
+                if "primary" in o and v["senses"]:
+                    # Re-aim the headword at a page -- for when its elected primary is a
+                    # passing mention and the real start is elsewhere. Anchors to the top of
+                    # that page (no chunk-level target for a manually-added ref).
+                    bid = _SIG2ID.get(o["primary"]["book"], o["primary"]["book"])
+                    ref = {"book": bid, "page": o["primary"]["page"]}
+                    s = v["senses"][0]
+                    s["primary"] = dict(ref)
+                    if not any(r["book"] == bid and r["page"] == ref["page"] for r in s.get("refs", [])):
+                        s.setdefault("refs", []).insert(0, dict(ref))
                 if "aliases_add" in o:
                     v["aliases"] = sorted(set(v.get("aliases", [])) | set(o["aliases_add"]))
                 if "aliases_drop" in o:
