@@ -197,8 +197,9 @@
        file's full path to a web page - that is a deliberate security boundary, not something this
        index can work around. Picking the files gets their <i>names</i> exactly right; the folder is
        the one thing you set, once.</p>
-    <p>Chrome and Adobe Acrobat honour <code>#page=</code> and jump to the exact paragraph. Safari
-       and macOS Preview open the right page but may ignore the paragraph.</p>
+    <p>A link opens the book at the right page (via <code>#page=</code>), at whatever zoom your
+       PDF viewer is set to. It does not scroll to the exact paragraph — browser PDF viewers
+       handle that inconsistently, so the index aims the page and lets you read from the top.</p>
     <input type="file" id="fileinput" accept="application/pdf,.pdf" multiple hidden>
   </div>
   <div id="about"></div>
@@ -214,12 +215,15 @@ let paths = {};
 try { paths = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch(e){ paths = {}; }
 const pathFor = i => paths[DATA.books[i].sig] || DATA.books[i].file;
 
-// PDF open parameters: page is 1-based; view=FitH,<top> scrolls the paragraph into view.
-// `top` is PDF user space (measured from the bottom of the page) -- precomputed at build.
-const url = r => {
-  const [b, , pdfPage, top] = r;
-  return pathFor(b) + "#page=" + pdfPage + "&view=FitH," + top;
-};
+// Open the book at the target page. We deliberately send ONLY #page=N and no view/zoom.
+// The obvious richer form -- #page=N&view=FitH,<top> to scroll the paragraph into view --
+// backfires in Chrome's PDF viewer: FitH means "fit the page WIDTH", which over-magnifies on
+// a wide window, and Chrome reads the <top> coordinate upside down (PDF space is measured
+// from the bottom), landing you on the page-number footer instead of the paragraph. Bare
+// #page=N lands at the top of the right page at the reader's own zoom -- predictable, and it
+// is what a back-of-book index promises anyway: the page. (`top` is still precomputed and
+// carried in the data, so a Chrome-verified precise-scroll mode can be added later.)
+const url = r => pathFor(r[0]) + "#page=" + r[2];
 
 const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
