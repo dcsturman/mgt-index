@@ -31,9 +31,9 @@ of the exercise: one lookup, every book, and the senses kept apart.
 | **TC** | Traveller Companion | 2024 Update | 186 | 938 | — |
 | **RH** | Robot Handbook | Apr 2024 | 266 | 1,504 | — |
 | **AL1** | Aliens of Charted Space, Vol. 1 | Apr 2024 | 305 | 3,260 | 30 |
-| **AL2** | Aliens of Charted Space, Vol. 2 | undated printing | 273 | 3,097 | 9 |
-| **SotR** | Pirates of Drinax: Ships of the Reach | ebook (2024) | 97 | 771 | 21 |
-| **JG** | Jayne's Guide to the Reach | Drinaxian Companion, pp. 187–213 | 27 | 200 | 7 |
+| **AL2** | Aliens of Charted Space, Vol. 2 | Dec 2020 | 273 | 3,097 | 9 |
+| **SotR** | Pirates of Drinax: Ships of the Reach | 2017 (ebook) | 97 | 771 | 21 |
+| **JG** | Jayne's Guide to the Reach | Drinaxian Companion (Jul 2022), pp. 187–213 | 27 | 200 | 7 |
 | | | | **1,896** | **14,453** | **122** |
 
 *Index refs* is how many page links point into that book; *Ships* is how many vessels in it
@@ -43,11 +43,12 @@ carry a full stat block and so appear in the Ships tab.
 index shows the Companion's own page numbers (187–213) so a reference lines up with the full
 book, but the links open a standalone 27-page PDF of just that chapter.
 
-**Editions matter.** Mongoose reprints these books and the pages move, so an index built
-against one printing is wrong for another. Every page link here is generated against the
-exact file listed above, and `books.toml` records each one's SHA-256 — the index's **About**
-panel shows them, so you can check whether your copy is the same printing before you trust a
-page number.
+**Editions matter, and the date column is only a hint.** Mongoose re-issues these PDFs with
+errata and the pages move — often *without* changing the copyright year — so the date above
+(the PDF's errata-printing date) tells you roughly which version, but not exactly. The exact
+identity is the **SHA-256**: `books.toml` records each file's, and the index's **About** panel
+shows all nine. Two files can share a copyright year and still differ; they cannot share a
+SHA-256. Check yours against the About panel before you trust a page number.
 
 The books themselves are **not** in this repo. They are commercial products and not mine to
 redistribute; bring your own PDFs.
