@@ -182,7 +182,9 @@ def build():
     }
 
     html = TEMPLATE.replace("__DATA__", json.dumps(data, separators=(",", ":")))
-    out = ROOT / "MGT2 Master Index.html"
+    # index.html at the repo root so GitHub Pages serves it at the bare site URL. The
+    # download asset in each release is renamed to the descriptive MGT2-Master-Index.html.
+    out = ROOT / "index.html"
     out.write_text(html, encoding="utf-8")
     print(f"{len(records)} records, {data['stats']['refs']} links")
     print(f"-> {out}  ({out.stat().st_size/1e6:.1f} MB)")
@@ -202,6 +204,22 @@ TEMPLATE = r"""<!doctype html>
   @media (prefers-color-scheme:dark){
     :root{ --bg:#131316; --fg:#e9e8e6; --dim:#95949c; --line:#2c2c31;
            --accent:#e08a6e; --card:#1a1a1e; --hit:#3a3320; --flash:#1e3a5f; }
+  }
+  /* Hosted-preview banner. Shown ONLY when the page is served over http(s) instead of opened
+     from disk -- in that mode a browser refuses to let it reach file:// PDFs, so every page
+     link is dead and the reader needs to be told to download the file. See the JS at the end. */
+  #hostbanner{display:none;align-items:center;gap:14px;padding:10px 18px;
+    background:#fde68a;color:#3a2f00;border-bottom:1px solid var(--line);
+    font:13px/1.45 ui-sans-serif,system-ui}
+  #hostbanner.show{display:flex}
+  #hostbanner a{background:#3a2f00;color:#fde68a;text-decoration:none;padding:5px 12px;
+    border-radius:6px;font-weight:600;white-space:nowrap}
+  #hostbanner button{margin-left:auto;background:none;border:0;color:#3a2f00;
+    font-size:19px;line-height:1;cursor:pointer;padding:0 2px}
+  @media (prefers-color-scheme:dark){
+    #hostbanner{background:#4a3a00;color:#ffe9a6}
+    #hostbanner a{background:#ffe9a6;color:#4a3a00}
+    #hostbanner button{color:#ffe9a6}
   }
   /* --hit and --flash are deliberately different colours doing different jobs. --hit marks
      search matches and link hovers -- there can be dozens on screen at once, so it must stay
@@ -324,6 +342,13 @@ TEMPLATE = r"""<!doctype html>
 </style>
 </head>
 <body>
+<div id="hostbanner">
+  <span><b>Hosted preview.</b> Page links can’t open your PDFs from a web page — a browser
+  won’t let an <code>https</code> page reach files on your disk. To use the ~10,800 links,
+  download the index and open it from the folder with your Traveller rulebooks.</span>
+  <a href="https://github.com/dcsturman/mgt-index/releases/latest/download/MGT2-Master-Index.html">Download</a>
+  <button id="hostx" title="Dismiss" aria-label="Dismiss">×</button>
+</div>
 <header>
   <div class="titlerow">
     <div>
@@ -351,7 +376,7 @@ TEMPLATE = r"""<!doctype html>
        <code>https://…</code> URL. Settings are stored in this browser only.</p>
     <div class="setbar" style="margin:0 0 12px">
       <button id="pickall">Choose the PDFs…</button>
-      <span class="count" id="pickmsg">Select all seven at once - filenames are filled in exactly, no typing.</span>
+      <span class="count" id="pickmsg">Select all nine at once - filenames are filled in exactly, no typing.</span>
     </div>
     <div id="rows"></div>
     <div class="setbar">
@@ -669,7 +694,7 @@ document.getElementById("about").innerHTML =
   + "<b>Italic labels</b> under a headword separate different senses of the same word.</p>"
 
   + "<h3>Before the links will work</h3>"
-  + "<p>Open <b>&#9881;</b> Settings and tell the index where your PDFs are. You can pick all seven "
+  + "<p>Open <b>&#9881;</b> Settings and tell the index where your PDFs are. You can pick all nine "
   + "files at once - the exact filenames are filled in for you - and then give the folder they live "
   + "in. Your paths are stored in this browser only.</p>"
 
@@ -700,6 +725,17 @@ if (location.hash.startsWith("#e-")){
   const want = location.hash.slice(1);
   const rec = DATA.records.find(r => r.k === "e" && slug(r.id) === want);
   if (rec) requestAnimationFrame(() => goTo(rec.id));
+}
+
+// Hosted-preview disclaimer. Opened from disk (file://) the links work, so say nothing.
+// Served over http(s) -- the GitHub Pages preview -- the links are dead, so warn once.
+if (location.protocol !== "file:" && !localStorage.getItem("mgt2-hostbanner-off")){
+  const b = document.getElementById("hostbanner");
+  b.classList.add("show");
+  document.getElementById("hostx").onclick = () => {
+    b.classList.remove("show");
+    localStorage.setItem("mgt2-hostbanner-off", "1");
+  };
 }
 </script>
 </body>

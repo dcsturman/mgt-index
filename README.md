@@ -9,7 +9,7 @@ that is really just a dump of its section headings — `Opposed Checks 62`, `Mul
 rule, it lives in an unheaded paragraph, and today it is unfindable. This index tries to
 find it.
 
-**Output:** `MGT2 Master Index.html` — 3,300+ headwords, 5,043 records, ~10,800 deep links
+**Output:** `index.html` — 3,300+ headwords, 5,043 records, ~10,800 deep links
 that open the right PDF at the right page. Plus a printable PDF, and a sortable catalogue of
 all 125 ships across the nine books that carry a full specification.
 
@@ -58,6 +58,11 @@ redistribute; bring your own PDFs.
 — one self-contained HTML file, no install, no build, nothing to run.
 (Or take it from the [releases page](https://github.com/dcsturman/mgt-index/releases/latest).)
 
+**[👀 Browse it online](https://dcsturman.github.io/mgt-index/)** — a preview to see what's in
+it and search the terms. The page **links won't work** in the online version: a browser
+won't let a hosted page open PDFs on your disk, so to actually jump into your books you have
+to download it (the page says so too). The preview is for looking, the download is for using.
+
 Save it **into the folder where you keep your Traveller PDFs**, then open it in a browser.
 If your files still have the names Mongoose shipped them under, that is the whole setup —
 the links are relative, so they find the books sitting beside them.
@@ -70,9 +75,9 @@ picker spell them. It matches renamed files by title words too. Settings live in
 `localStorage`, so you do this once per browser.
 
 > Take it from the release, not from the file in the repo. GitHub serves everything it has
-> under version control as plain text, so clicking `MGT2 Master Index.html` in the file list
-> shows you a wall of source rather than downloading it — no query string or raw link changes
-> that. Release assets are the only thing GitHub sends as an actual download. Or use `curl`:
+> under version control as plain text, so clicking `index.html` in the file list shows you a
+> wall of source rather than downloading it — no query string or raw link changes that.
+> Release assets are the only thing GitHub sends as an actual download. Or use `curl`:
 >
 > ```sh
 > curl -L -o "MGT2 Master Index.html" \
