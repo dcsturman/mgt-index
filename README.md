@@ -100,7 +100,9 @@ its own view, and it beats hunting for a name you half-remember.
 
 ## How it works
 
-Four stages. Stage 1 and Stage 4 are deterministic and free; only 2 and 3 call a model.
+Six stages. Stage 1 and Stage 4 are deterministic and free; only 2, 3 and 3c call a model.
+[ARCHITECTURE.md](ARCHITECTURE.md) is the full account — the invariant, the stages, the
+chunk → entry → snippet → canon data flow, caching, and the cost model.
 
 | | Stage | Cost | What it does |
 |---|---|---|---|
