@@ -68,11 +68,21 @@ Save it **into the folder where you keep your Traveller PDFs**, then open it in 
 If your files still have the names Mongoose shipped them under, that is the whole setup —
 the links are relative, so they find the books sitting beside them.
 
-Otherwise open **Settings** (⚙): type the folder the books live in, and hit **Choose…** to
-pick them. The picker exists because a browser will tell a page a file's *name* but never
-its *path*, and these filenames are long and dated — `MgT2 Core Rulebook Update 2022
-11-12-2024.pdf` — so one wrong character silently kills every link into that book. Let the
-picker spell them. It matches renamed files by title words too. Settings live in
+Otherwise open **Settings** (⚙) and hit **Choose the folder…** — point it at the folder
+your books live in and all nine rows fill in at once. Then type that folder's path in the
+box and **Apply folder**.
+
+**Your books don't have to be in one folder.** Pick the folder they all sit *under* and the
+browser reports each PDF's position within it, so `Core/` and `Drinax/` get filled in for
+you — you name the root once and the subfolders are discovered. A book somewhere else
+entirely (another drive, a NAS, a web host) doesn't have to move either: type its own
+`file:///…` or `https://…` URL into its row and **Apply folder** leaves that row alone.
+
+The picker exists because a browser will tell a page a file's *name* but never its *path*,
+and these filenames are long and dated — `MgT2 Core Rulebook Update 2022 11-12-2024.pdf` —
+so one wrong character silently kills every link into that book. Let the picker spell them.
+It matches renamed files by title words too. The root is the one thing you type, and if the
+index itself sits in that root you can leave even that blank. Settings live in
 `localStorage`, so you do this once per browser.
 
 > Take it from the release, not from the file in the repo. GitHub serves everything it has

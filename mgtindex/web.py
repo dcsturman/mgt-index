@@ -372,27 +372,36 @@ TEMPLATE = r"""<!doctype html>
     <h2>Where are your PDFs?</h2>
     <p>Each page number links into a book. Tell the index where each book actually lives.
        A path can be a plain filename (same folder as this page), a relative path
-       (<code>books/High&nbsp;Guard.pdf</code>), an absolute <code>file:///…</code> URL, or an
+       (<code>Drinax/Jayne's&nbsp;Guide.pdf</code>), an absolute <code>file:///…</code> URL, or an
        <code>https://…</code> URL. Settings are stored in this browser only.</p>
     <div class="setbar" style="margin:0 0 12px">
+      <button id="pickdir">Choose the folder…</button>
       <button id="pickall">Choose the PDFs…</button>
-      <span class="count" id="pickmsg">Select all nine at once - filenames are filled in exactly, no typing.</span>
+      <span class="count" id="pickmsg">Point it at the folder your Traveller books live in - subfolders and all.</span>
     </div>
     <div id="rows"></div>
     <div class="setbar">
-      <input type="text" id="base" placeholder="Folder the books live in, e.g. file:///Users/you/Traveller/  (blank = same folder as this page)">
+      <input type="text" id="base" placeholder="Full path of that folder, e.g. file:///Users/you/Traveller/  (blank = same folder as this page)">
       <button id="apply">Apply folder</button>
       <button id="reset">Reset</button>
       <button id="test">Test first link</button>
     </div>
-    <p style="margin-top:12px"><b>Why you still have to type the folder:</b> browsers never reveal a
-       file's full path to a web page - that is a deliberate security boundary, not something this
-       index can work around. Picking the files gets their <i>names</i> exactly right; the folder is
-       the one thing you set, once.</p>
+    <p style="margin-top:12px"><b>Books in more than one folder?</b> Use <b>Choose the folder…</b> and pick the
+       one they all sit <i>under</i>. The browser reports each PDF's position within that folder, so
+       <code>Core/</code> and <code>Drinax/</code> are filled in for you and the paths above end up different
+       from each other. You give the root once; the rest is discovered.</p>
+    <p><b>Why you type the folder at all:</b> browsers never reveal a file's full path to a web page - a
+       deliberate security boundary, not something this index can work around. Picking gets the
+       <i>names</i> and the <i>subfolders</i> exactly right; the root is the one thing you set, once.
+       If this page already sits in that root, leave the box blank.</p>
+    <p>A book somewhere else entirely - another drive, a NAS, a web host - does not need to move.
+       Type its own <code>file:///…</code> or <code>https://…</code> URL into its row and
+       <b>Apply folder</b> will leave that row alone.</p>
     <p>A link opens the book at the right page (via <code>#page=</code>), at whatever zoom your
        PDF viewer is set to. It does not scroll to the exact paragraph — browser PDF viewers
        handle that inconsistently, so the index aims the page and lets you read from the top.</p>
     <input type="file" id="fileinput" accept="application/pdf,.pdf" multiple hidden>
+    <input type="file" id="dirinput" webkitdirectory directory multiple hidden>
   </div>
   <div id="about"></div>
   <div id="alpha"></div>
@@ -588,50 +597,100 @@ rows.innerHTML = DATA.books.map((b, i) =>
   + '" title="' + esc(b.title) + '">'
   + '<button data-pick="' + i + '">Choose…</button></div>').join("");
 
+// ---- the root folder ----
+// Kept in its own key, separately from the per-book paths, for one reason: knowing the root
+// that produced the current paths is what lets "Apply folder" RE-BASE them -- swap the root
+// and keep the "Core/", "Drinax/" the pickers discovered -- instead of flattening every row
+// back to a bare filename and throwing that structure away.
+const BKEY = "mgt2-index-base-v1";
+let lastBase = localStorage.getItem(BKEY) || "";
+const baseBox = document.getElementById("base");
+baseBox.value = lastBase;
+const baseValue = () => {
+  const v = baseBox.value.trim();
+  return v && !/[/]$/.test(v) ? v + "/" : v;
+};
+const setBase = v => { lastBase = v; baseBox.value = v; localStorage.setItem(BKEY, v); };
+// A row is "somewhere else entirely" if it carries its own scheme or starts at the filesystem
+// root. Those are hand-set escape hatches -- a NAS, a web host -- and re-basing must not move them.
+const isAbs = v => /^(?:[a-z][a-z0-9+.\-]*:|\/)/i.test(v);
+
 // ---- file pickers ----
 // A browser will not tell a page where a file lives -- only its name and its bytes. So the
 // picker's job is to get the FILENAME exactly right (these names are long and dated, and a
 // single wrong character silently breaks every link into that book). The folder is typed once.
 const fileInput = document.getElementById("fileinput");
+const dirInput = document.getElementById("dirinput");
 let pickTarget = null;   // book index, or null for "match them all by name"
 
-function applyPicked(files){
-  const base = document.getElementById("base").value.trim();
-  const pre = base && !/[/]$/.test(base) ? base + "/" : base;
+// A file pick yields bare names; a DIRECTORY pick yields webkitRelativePath -- the file's
+// position inside the folder that was chosen. That is the whole multi-folder story: the reader
+// names one root and the browser reports "Core/x.pdf" vs "Drinax/y.pdf" for free. It still will
+// not disclose the root's absolute path, so that stays typed (or blank, if this page sits in it).
+const relName = f => f.name;
+const relPath = f => {
+  const p = f.webkitRelativePath || f.name;
+  const cut = p.indexOf("/");                       // drop the chosen folder's own name --
+  return cut < 0 ? p : p.slice(cut + 1);            // the reader supplies that as the root
+};
+
+// A "#" in a folder name would end the URL and swallow our #page=N. Nothing else needs
+// escaping here: browsers accept spaces and apostrophes in an href unencoded, and encoding
+// them would break the paths readers have already typed by hand.
+const safe = s => s.replace(/#/g, "%23");
+
+function applyPicked(files, rel){
+  const pre = baseValue();
   const inputs = [...rows.querySelectorAll("input")];
   let n = 0;
   if (pickTarget !== null){
-    if (files[0]){ inputs[pickTarget].value = pre + files[0].name; n = 1; }
+    if (files[0]){ inputs[pickTarget].value = pre + safe(rel(files[0])); n = 1; }
   } else {
     // match each chosen file to a book. Prefer the registered filename; fall back to the
-    // siglum's distinctive words so a renamed-but-recognisable file still lands right.
+    // title's distinctive words so a renamed-but-recognisable file still lands right.
+    // Match on the BASENAME, but store the relative path -- the subfolder is the point.
     for (const f of files){
       let i = DATA.books.findIndex(b => b.file.toLowerCase() === f.name.toLowerCase());
       if (i < 0) i = DATA.books.findIndex((b, j) =>
         !inputs[j].dataset.claimed &&
         b.title.toLowerCase().split(/\W+/).filter(w => w.length > 4)
           .some(w => f.name.toLowerCase().includes(w)));
-      if (i >= 0){ inputs[i].value = pre + f.name; inputs[i].dataset.claimed = "1"; n++; }
+      if (i >= 0){ inputs[i].value = pre + safe(rel(f)); inputs[i].dataset.claimed = "1"; n++; }
     }
     inputs.forEach(i => delete i.dataset.claimed);
   }
+  setBase(pre);        // these paths are now relative to this root, so re-basing can undo it
   const msg = document.getElementById("pickmsg");
   msg.textContent = n + " of " + DATA.books.length + " matched"
-    + (n < DATA.books.length ? " - set the rest by hand" : " - all set");
+    + (n < DATA.books.length ? " - set the rest by hand"
+       : pre ? " - all set" : " - all set; if they are not beside this page, give the folder below");
   msg.className = "count" + (n === DATA.books.length ? " ok" : "");
   save();
   pickTarget = null;
 }
 
 document.getElementById("pickall").onclick = () => { pickTarget = null; fileInput.multiple = true; fileInput.click(); };
+document.getElementById("pickdir").onclick = () => { pickTarget = null; dirInput.click(); };
 rows.addEventListener("click", e => {
   const b = e.target.closest("button[data-pick]");
   if (!b) return;
   pickTarget = +b.dataset.pick; fileInput.multiple = false; fileInput.click();
 });
 fileInput.addEventListener("change", () => {
-  if (fileInput.files.length) applyPicked([...fileInput.files]);
+  if (fileInput.files.length) applyPicked([...fileInput.files], relName);
   fileInput.value = "";
+});
+// A directory pick hands back the ENTIRE tree, so drop everything that is not a PDF before
+// the fuzzy title matcher gets a look at it -- "High Guard notes.txt" must not claim HG's row.
+dirInput.addEventListener("change", () => {
+  const pdfs = [...dirInput.files].filter(f => /\.pdf$/i.test(f.name));
+  if (pdfs.length) applyPicked(pdfs, relPath);
+  else {
+    const msg = document.getElementById("pickmsg");
+    msg.textContent = "No PDFs in that folder - pick the one your books are under";
+    msg.className = "count";
+  }
+  dirInput.value = "";
 });
 
 function save(){
@@ -658,14 +717,28 @@ document.getElementById("tab-sh").onclick = () => show("sh");
 
 document.getElementById("cfg").onclick = () => panel("settings");
 document.getElementById("abt").onclick = () => panel("about");
+// Re-base, do not clobber. The old version overwrote all nine rows with root+registered
+// filename, which silently destroyed both the subfolders a directory pick had found and any
+// path typed by hand -- the exact reason books in several folders felt impossible to set up.
 document.getElementById("apply").onclick = () => {
-  let p = document.getElementById("base").value.trim();
-  if (p && !/[/]$/.test(p)) p += "/";
-  rows.querySelectorAll("input").forEach((i, n) => i.value = p + DATA.books[n].file);
+  const p = baseValue();
+  rows.querySelectorAll("input").forEach((i, n) => {
+    const v = i.value.trim();
+    let tail;
+    if (lastBase && v.startsWith(lastBase)) tail = v.slice(lastBase.length);  // keep the subfolder
+    else if (isAbs(v)) return;                                                // not ours to move
+    else tail = v || DATA.books[n].file;
+    i.value = p + tail;
+  });
+  setBase(p);
   save();
 };
 document.getElementById("reset").onclick = () => {
-  localStorage.removeItem(KEY); paths = {};
+  localStorage.removeItem(KEY); localStorage.removeItem(BKEY); paths = {};
+  setBase("");
+  const msg = document.getElementById("pickmsg");
+  msg.textContent = "Point it at the folder your Traveller books live in - subfolders and all.";
+  msg.className = "count";
   rows.querySelectorAll("input").forEach((i, n) => i.value = DATA.books[n].file);
   doSearch();
 };
@@ -698,9 +771,10 @@ document.getElementById("about").innerHTML =
   + "<b>Italic labels</b> under a headword separate different senses of the same word.</p>"
 
   + "<h3>Before the links will work</h3>"
-  + "<p>Open <b>&#9881;</b> Settings and tell the index where your PDFs are. You can pick all nine "
-  + "files at once - the exact filenames are filled in for you - and then give the folder they live "
-  + "in. Your paths are stored in this browser only.</p>"
+  + "<p>Open <b>&#9881;</b> Settings and tell the index where your PDFs are. Choose the folder your "
+  + "books live in and every one of the nine is filled in exactly - including its subfolder, if they "
+  + "are spread across several - then give that folder's full path. Your paths are stored in this "
+  + "browser only.</p>"
 
   + "<h3>Books indexed</h3>"
   + "<p>These page references are only valid against these exact files. If you are unsure you have "
