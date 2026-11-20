@@ -1,0 +1,4 @@
+# The index links into rulebook PDFs that are deliberately not hosted here (they are
+# commercial; readers bring their own). Keep crawlers off those dead links.
+User-agent: *
+Disallow: /*.pdf

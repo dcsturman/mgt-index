@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Not hosted here — MGT2 Master Index</title>
+<!-- GitHub Pages serves this for ANY missing path, with a 404 status (which is correct: there
+     is nothing there). Almost every hit is a page link from the hosted preview of the index,
+     pointing at a rulebook PDF that is deliberately not published -- the books are commercial
+     and readers bring their own. So explain that, rather than show a bare 404.
+     Links are absolute: this page is served at whatever path was requested. -->
+<style>
+  :root{ --bg:#faf9f7; --fg:#16151a; --dim:#6b6a72; --line:#e2e0dc; --accent:#8a3324; --card:#fff; }
+  @media (prefers-color-scheme:dark){
+    :root{ --bg:#131316; --fg:#e9e8e6; --dim:#95949c; --line:#2c2c31; --accent:#e08a6e; --card:#1a1a1e; }
+  }
+  body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 ui-sans-serif,system-ui}
+  main{max-width:620px;margin:10vh auto;padding:28px 32px;background:var(--card);
+       border:1px solid var(--line);border-radius:12px}
+  h1{font-size:22px;margin:0 0 6px}
+  .file{color:var(--dim);font:14px ui-monospace,monospace;word-break:break-all;margin:0 0 18px}
+  p{margin:0 0 14px}
+  a{color:var(--accent)}
+  .btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+  .btns a{text-decoration:none;padding:8px 16px;border-radius:8px;font-weight:600;
+          border:1px solid var(--accent)}
+  .btns a.primary{background:var(--accent);color:var(--card)}
+</style>
+</head>
+<body>
+<main>
+  <h1 id="title">Page not found</h1>
+  <p class="file" id="file"></p>
+  <div id="pdf" hidden>
+    <p>The rulebooks aren’t hosted on this site. They’re commercial Mongoose products, so
+       the index only <em>points</em> into them — you bring your own copies.</p>
+    <p>To make the page links work, download the index, save it in the folder with your
+       Traveller PDFs, and open it from there. (If your books are elsewhere, the index’s
+       ⚙ Settings panel lets you point it at them.)</p>
+  </div>
+  <p id="other">There’s nothing at this address.</p>
+  <div class="btns">
+    <a class="primary" href="https://github.com/dcsturman/mgt-index/releases/latest/download/MGT2-Master-Index.html">Download the index</a>
+    <a href="/">Back to the index</a>
+  </div>
+</main>
+<script>
+  const path = decodeURIComponent(location.pathname);
+  if (/\.pdf$/i.test(path)) {
+    document.getElementById("title").textContent = "That rulebook isn’t hosted here";
+    document.getElementById("file").textContent = path.split("/").pop();
+    document.getElementById("pdf").hidden = false;
+    document.getElementById("other").hidden = true;
+  }
+</script>
+</body>
+</html>

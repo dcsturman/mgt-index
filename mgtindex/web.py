@@ -437,7 +437,7 @@ function refsHTML(rs){
     else out += ", ";
     // open the book in its own tab -- clicking a page ref must never navigate the
     // index away from under you
-    out += '<a class="pg' + (prim ? " prim" : "") + '" target="_blank" rel="noopener"'
+    out += '<a class="pg' + (prim ? " prim" : "") + '" target="_blank" rel="noopener nofollow"'
         + ' href="' + esc(url(r)) + '" data-b="' + b + '">' + printed + "</a>";
   });
   return out;
